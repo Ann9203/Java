@@ -1,0 +1,43 @@
+/*
+通过除法来联系异常的实例
+*/
+
+class fushuTest extends Exception
+{
+	private String msg;
+	fushuTest(String msg)
+	{
+		this.msg=msg;
+		}
+		public String getMessage()
+		{
+			return msg;
+			}
+	}
+class Demo
+{
+	void getNum(int a,int b) throws fushuTest
+	{
+		if (b==0)
+			throw new fushuTest("除数不能为0");
+		System.out.println(a/b);
+		}
+	}
+	
+	class exceptionTest
+	{
+		public static void main(String[] args)
+		{
+			try{
+						Demo d=new Demo();
+						d.getNum(4,0);
+				}
+			catch(fushuTest e)
+			{
+				System.out.println(e.toString());
+				System.out.println(e.getMessage());
+				
+				}
+	
+			}
+		}

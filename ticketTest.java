@@ -1,0 +1,39 @@
+/*
+	需求：窗口买票
+	步骤：
+		1.要有窗口
+		2.共同的数据 票数
+		
+*/
+//方法一：继承Thread，同时使用静态变量static但是还是出现了100号的两张票。。。。需要上锁
+class Demo extends Thread
+{
+	private String name;
+	private static  int ticket=100;
+	Demo(String name)
+	{
+		this.name=name;
+		}
+	public void run()
+	{
+		while(true)
+		{
+			for(int x=1;x<=ticket;x++)
+			{
+				System.out.println(this.getName()+"ticket="+ticket);
+				ticket--;
+			}
+			
+			}
+		}
+	}
+	class ticketTest
+	{
+		public static void main(String[] args)
+		{
+			Demo d=new Demo("1");
+			Demo d1=new Demo("2");
+			d.start();
+			d1.start();
+			}
+		}

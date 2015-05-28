@@ -1,0 +1,97 @@
+/*
+解决死锁的其中一个办法：PV操作
+两个线程共享一个资源，一个是存放资源，一个是提取资源
+*/
+class Student
+{
+	public  String name;
+	public  String sex;
+	public 	boolean flag=false;
+	
+	}
+class Input implements Runnable
+{
+	//要想放资源首先要有资源的对象
+	//Student s=new Student();
+	Student s;
+
+	Input(Student s)
+	{
+		this.s=s;
+		}
+	public void run()
+	{
+		//如果x在循环中的话，那么x的值就会一直是0，所以应该吧x的值调试到外边来
+		 int x=0;	
+		while(true)
+		{
+			//加上锁，使得存拿的数据是一直的
+			//但是目前还有一个问题就是：存一个数据拿一个数据，而不是存好几个数据，然后再拿好几个数据
+			//所以现在就是如果数据库中的状态为false的话就开始存储数据，如果是true的话就要等待一下
+			//锁是嵌套的所以要表示锁，用r来标示，都是通过s对象发出的命令
+			synchronized(s)
+			{
+					//如果标记为真的话，就让其等待一下
+					if(s.flag)
+						try{r.wait();}catch(Exception e){}
+						//如果为假就要写入数据，同时更改flag的状态为true
+					if(x==0)
+						{
+							s.name="Hello";
+							s.sex="man";
+							}
+							else
+							{
+								s.name="小明";
+								s.sex="男";
+								}
+							x=(x+1)%2;
+							s.flag=true;
+							r.notify();
+				}					
+		}		
+	}
+	
+	}
+class Output implements Runnable
+{
+	//虽然说存放都要引入资源，但是他们的资源应该是一个，我们的这种New的做法，很显然是两个对象，两个资源，
+	//要想避免是两个对象的方法有两种：
+	//第一种：使用单利模式，只让起创建一个对象，另一种就是静态，但是静态只有到最后才能让资源消耗
+	//第三种：现将资源对象引入，就像是拉煤，将地址引入然后再初始化
+	//Student s=new Student();
+	Student s;
+	Output(Student s)
+	{
+		this.s=s;
+		}
+	public void run()
+	{
+		while(true)
+		{
+			synchronized(s)
+			{
+				//如果数据库中为假证明还没有资源可以取到
+				if(!s.flag)
+					try{r.wait();}catch(Exception e){}
+				System.out.println(s.name+"..............."+s.sex);
+				s.flag=false;
+				r.notify();
+			}
+		}
+	}
+}
+	class PVDemo
+	{
+		public static void main(String[] args)
+		{
+			Student s=new Student();
+			Input in=new Input(s);
+			Output ou=new Output(s);
+			Thread t1=new Thread(in);
+			Thread t2 =new Thread(ou);
+						t1.start();
+						t2.start();
+			}
+		}
+	
