@@ -43,7 +43,7 @@ class test implements Runnable
 		static Object locka=new Object();
 		static Object lockb=new Object();
 		}
-	class daedLock
+	class dadLock
 	{
 		public static void main(String[] args)
 		{
