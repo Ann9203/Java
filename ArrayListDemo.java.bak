@@ -1,0 +1,75 @@
+import java.util.*;
+/*
+添加一个person，这个person类中，不可以添加相同的元素，只要是胡I姓名和年龄相等就可以
+认为这两个元素相同
+取出Arraylist 集合中的重复元素，+
+
+
+*/
+class Person
+{
+	private String name;
+	private int age;
+	Person(String name,int age)
+	{
+		this.name=name;
+		this.age=age;
+		}
+	public String getName()
+	{
+		return this.name;
+		}
+		public int getAge()
+		{
+			return this.age;
+			}
+			public boolean equals(Object obj)
+			{
+				//要用ArrayList装在对象的话，结果他返回的是Object
+				if(!(obj instanceof Person))
+						return false;
+				Person p=(Person)obj;
+				return this.name.equals(p.name)&&this.age==age;
+				
+				}
+	
+	}
+class ArrayListDemo
+{
+	public static void main(String[] args)
+	{
+		ArrayList ar=new ArrayList();
+		ar.add(new Person("zhangsan",20));
+		ar.add(new Person("zhengbo",22));
+		ar.add(new Person("wangwu",14));
+		ar.add(new Person("wangwu",14));
+		ar=SingArray(ar);
+		
+		Iterator it =ar.iterator();
+		while(it.hasNext())
+		{
+			Object obj=it.next();
+			Person p=(Person)obj;
+			System.out.println(p.getName()+","+p.getAge());
+			}
+		
+		
+		}
+		
+		//取出ArrayList中相同的元素
+		//定义一个排出相同元素的方法
+		public static ArrayList SingArray(ArrayList al)
+		{
+			ArrayList ar=new ArrayList();
+			Iterator it=al.iterator();
+			while(it.hasNext())
+			{
+				Object obj=it.next();
+				if(!ar.contains(obj))
+				{
+					ar.add(obj);
+					}
+				}
+				return ar;
+			}
+	}
